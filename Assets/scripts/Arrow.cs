@@ -53,10 +53,12 @@ public class Arrow : MonoBehaviour
         if (isCorrect)
         {
             Debug.Log("Perfect Hit!");
+            ScoreManager.Instance.AddScore(100);
         }
         else
         {
             Debug.Log("Missed!");
+            ScoreManager.Instance.AddScore(-50);
         }
 
         isPressed = true;

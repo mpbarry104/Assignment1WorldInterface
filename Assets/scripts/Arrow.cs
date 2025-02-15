@@ -50,18 +50,21 @@ public class Arrow : MonoBehaviour
 
     void HandleHit(bool isCorrect)
     {
+        ProgressManager gameManager = Object.FindFirstObjectByType<ProgressManager>();
+
         if (isCorrect)
         {
             Debug.Log("Perfect Hit!");
-            ScoreManager.Instance.AddScore(100);
+            gameManager.IncreaseProgress(); // Increase progress bar
         }
         else
         {
             Debug.Log("Missed!");
-            ScoreManager.Instance.AddScore(-50);
+            gameManager.DecreaseProgress(); // Decrease progress bar
         }
 
         isPressed = true;
         Destroy(gameObject);
     }
+
 }

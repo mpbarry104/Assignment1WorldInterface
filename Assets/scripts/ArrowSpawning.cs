@@ -1,13 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ArrowSpawner : MonoBehaviour
 {
-    public GameObject[] arrowPrefabs;  // Array to hold arrow prefabs
-    public GameObject spawnPoint;      // Reference to the empty GameObject (spawn point)
-    public GameObject targetZone;     // Reference to the empty GameObject (target zone)
-    public float spawnInterval = 1f;   // Interval between arrow spawns
-    public float speed = 5f;           // Speed at which arrows move down
+    public GameObject[] arrowPrefabs;
+    public float spawnInterval = 1f;
+    public float speed = 5f;
+
+    public Transform spawnPoint; // Empty GameObject for arrow spawning
+    public Transform targetZone; // Empty GameObject for the target area
+
     private float timeToNextSpawn;
+
+    private Dictionary<string, float> spawnPositions = new Dictionary<string, float>()
+    {
+        { "Left", -3f },   // X position for Left arrows
+        { "Down", -1f },   // X position for Down arrows
+        { "Up", 1f },      // X position for Up arrows
+        { "Right", 3f }    // X position for Right arrows
+    };
 
     void Start()
     {
@@ -20,39 +31,24 @@ public class ArrowSpawner : MonoBehaviour
 
         if (timeToNextSpawn <= 0)
         {
-            if (arrowPrefabs != null && arrowPrefabs.Length > 0)
-            {
-                int randomArrow = Random.Range(0, arrowPrefabs.Length);
-
-                // Ensure spawnPoint and targetZone are assigned
-                if (spawnPoint != null && targetZone != null)
-                {
-                    // Instantiate the arrow at the spawn point's position
-                    GameObject arrow = Instantiate(arrowPrefabs[randomArrow], spawnPoint.transform.position, Quaternion.identity);
-
-                    // Ensure the Arrow script is attached to the prefab
-                    Arrow arrowScript = arrow.GetComponent<Arrow>();
-                    if (arrowScript != null)
-                    {
-                        // Initialize the arrow with speed and the position of the target zone
-                        arrowScript.Initialize(speed, targetZone.transform.position.y);
-                    }
-                    else
-                    {
-                        Debug.LogError("Arrow script not found on prefab!");
-                    }
-                }
-                else
-                {
-                    Debug.LogError("Spawn point or target zone is not assigned!");
-                }
-
-                timeToNextSpawn = spawnInterval;
-            }
-            else
-            {
-                Debug.LogError("Arrow prefabs are not assigned!");
-            }
+            SpawnArrow();
+            timeToNextSpawn = spawnInterval;
         }
+    }
+
+    void SpawnArrow()
+    {
+        int randomIndex = Random.Range(0, arrowPrefabs.Length);
+        GameObject arrowPrefab = arrowPrefabs[randomIndex];
+
+        string arrowTag = arrowPrefab.tag;
+        float spawnX = spawnPositions.ContainsKey(arrowTag) ? spawnPositions[arrowTag] : 0f;
+
+        // Spawn position from the empty GameObject
+        Vector3 spawnPosition = new Vector3(spawnX, spawnPoint.position.y, 0);
+        GameObject arrow = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
+
+        // Assign speed and target zone position based on empty GameObject
+        arrow.GetComponent<Arrow>().Initialize(speed, targetZone.position.y);
     }
 }

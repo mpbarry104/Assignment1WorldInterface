@@ -3,11 +3,26 @@ using UnityEngine.UI;
 
 public class ProgressManager : MonoBehaviour
 {
+    public static ProgressManager Instance { get; private set; }
+
     public Slider progressBar;
-    public int maxProgress = 100; 
+    public int maxProgress = 10;
     private int currentProgress = 0;
 
-    void Start()
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
     {
         if (progressBar != null)
         {
@@ -32,15 +47,15 @@ public class ProgressManager : MonoBehaviour
 
     public void DecreaseProgress()
     {
-        if (currentProgress > 0)  // Prevents progress from going below 0
+        if (currentProgress > 0)
         {
             currentProgress--;
             progressBar.value = currentProgress;
         }
     }
 
-    void GameOver()
+    private void GameOver()
     {
-        Debug.Log("Game Over! You filled the progress bar.");
+        Debug.Log("Game Over! Progress bar full.");
     }
 }

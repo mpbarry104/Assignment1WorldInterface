@@ -6,7 +6,6 @@ public class Arrow : MonoBehaviour
     private float targetZoneY;
     private bool isInTargetZone = false;
     private bool isPressed = false;
-    private float targetZoneThreshold = 0.1f;
 
     public void Initialize(float arrowSpeed, float targetY)
     {
@@ -16,28 +15,19 @@ public class Arrow : MonoBehaviour
 
     void Update()
     {
-        transform.position += Vector3.down * speed * Time.deltaTime;
+        transform.position += Vector3.up * speed * Time.deltaTime;
 
-        if (Mathf.Abs(transform.position.y - targetZoneY) <= targetZoneThreshold)
+        if (transform.position.y >= targetZoneY && !isInTargetZone)
         {
             isInTargetZone = true;
         }
 
         if (isInTargetZone && !isPressed)
         {
-            if (Input.GetKeyDown(KeyCode.W) && tag == "Up")
-            {
-                HandleHit(true);
-            }
-            else if (Input.GetKeyDown(KeyCode.S) && tag == "Down")
-            {
-                HandleHit(true);
-            }
-            else if (Input.GetKeyDown(KeyCode.A) && tag == "Left")
-            {
-                HandleHit(true);
-            }
-            else if (Input.GetKeyDown(KeyCode.D) && tag == "Right")
+            if (Input.GetKeyDown(KeyCode.W) && tag == "Up" ||
+                Input.GetKeyDown(KeyCode.S) && tag == "Down" ||
+                Input.GetKeyDown(KeyCode.A) && tag == "Left" ||
+                Input.GetKeyDown(KeyCode.D) && tag == "Right")
             {
                 HandleHit(true);
             }
@@ -50,21 +40,19 @@ public class Arrow : MonoBehaviour
 
     void HandleHit(bool isCorrect)
     {
-        ProgressManager gameManager = Object.FindFirstObjectByType<ProgressManager>();
-
         if (isCorrect)
         {
             Debug.Log("Perfect Hit!");
-            gameManager.IncreaseProgress(); // Increase progress bar
+            ProgressManager.Instance.IncreaseProgress();
         }
         else
         {
             Debug.Log("Missed!");
-            gameManager.DecreaseProgress(); // Decrease progress bar
+            
+            ProgressManager.Instance.DecreaseProgress();
         }
 
         isPressed = true;
         Destroy(gameObject);
     }
-
 }

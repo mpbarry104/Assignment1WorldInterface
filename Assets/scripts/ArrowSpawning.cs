@@ -14,10 +14,10 @@ public class ArrowSpawner : MonoBehaviour
 
     private Dictionary<string, float> spawnPositions = new Dictionary<string, float>()
     {
-        { "Left", -3f },   // X position for Left arrows
-        { "Down", -1f },   // X position for Down arrows
-        { "Up", 1f },      // X position for Up arrows
-        { "Right", 3f }    // X position for Right arrows
+        { "Left", -4.706587f },   // X position for Left arrows
+        { "Down", 5.215292f },   // X position for Down arrows
+        { "Up", -1.478039f },      // X position for Up arrows
+        { "Right", 1.750509f }    // X position for Right arrows
     };
 
     void Start()

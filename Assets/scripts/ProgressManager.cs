@@ -8,6 +8,9 @@ public class ProgressManager : MonoBehaviour
     public Slider progressBar;
     public int maxProgress = 10;
     private int currentProgress = 0;
+    private AudioSource audioSource;
+    public AudioClip hitSound;
+    public AudioClip missSound;
 
     private void Awake()
     {
@@ -20,6 +23,8 @@ public class ProgressManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -37,6 +42,7 @@ public class ProgressManager : MonoBehaviour
         {
             currentProgress++;
             progressBar.value = currentProgress;
+            PlaySound(hitSound);
 
             if (currentProgress >= maxProgress)
             {
@@ -51,6 +57,15 @@ public class ProgressManager : MonoBehaviour
         {
             currentProgress--;
             progressBar.value = currentProgress;
+            PlaySound(missSound);
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
         }
     }
 

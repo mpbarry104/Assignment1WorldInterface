@@ -6,7 +6,7 @@ public class ProgressManager : MonoBehaviour
     public static ProgressManager Instance { get; private set; }
 
     public Slider progressBar;
-    public int maxProgress = 10;
+    public int maxProgress = 30;
     private int currentProgress = 0;
     private AudioSource audioSource;
     public AudioClip hitSound;
